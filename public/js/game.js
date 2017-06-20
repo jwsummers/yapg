@@ -12,6 +12,8 @@ let platforms;
 let score = 0;
 let scoreText;
 
+let timer;
+
 function preload() {
 		game.load.image('grass', 'assets/Tiles/grassMid.png');
 		game.load.image('grassLeftEnd', 'assets/Tiles/grassCliffRight.png');
@@ -25,6 +27,9 @@ function preload() {
 
 function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE);
+	timer = game.time.create(false);
+	timerEvent = timer.add(Phaser.Timer.SECOND * 15, this.endTimer, this);
+	timer.start();
 
 	platforms = game.add.group();
 	platforms.enableBody = true;
@@ -96,7 +101,7 @@ function update() {
 	const starPlatform = game.physics.arcade.collide(stars, platforms);
 	const hitStars = game.physics.arcade.overlap(player, stars, collectStar, null, this);
 	scoreText.text = `Score: ${score}`; // Don't need to run this from the callback for it to update
-	
+
   function addToScore(amount) {
 	if (Number.isNaN(amount)) {
 		return console.log('amount should be a Number');
@@ -142,4 +147,22 @@ function update() {
 }
 
 function render() {
+
+  if (timer.running) {
+    game.debug.text('Remaining Time: ' + formatTime(Math.round((timerEvent.delay - timer.ms) / 1000)), 250, 50, "#ff0");
+  }
+    else {
+      game.debug.text('Done!', 250, 50, '#0f0');
+    }
+
+	function endTimer() {
+	  timer.stop();
+	}
+
+	function formatTime(s) {
+	  // Convert seconds (s) to a nicely formatted and padded time string
+		var minutes = '0' + Math.floor(s / 60);
+		var seconds = '0' + (s - minutes * 60);
+		return minutes + ':' + seconds  ;
+	}
 }
