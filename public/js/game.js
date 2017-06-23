@@ -148,12 +148,7 @@ function update() {
 
 function render() {
 
-  if (timer.running) {
-    game.debug.text('Remaining Time: ' + formatTime(Math.round((timerEvent.delay - timer.ms) / 1000)), 250, 50, "#ff0");
-  }
-    else {
-      game.debug.text('Done!', 250, 50, '#0f0');
-    }
+  game.debug.text('Remaining Time: ' + formatTime(Math.round((timerEvent.delay - timer.ms) / 1000)), 250, 50, "#ff0");
 
 	function endTimer() {
 	  timer.stop();
@@ -163,6 +158,6 @@ function render() {
 	  // Convert seconds (s) to a nicely formatted and padded time string
 		var minutes = '0' + Math.floor(s / 60);
 		var seconds = '0' + (s - minutes * 60);
-		return minutes + ':' + seconds  ;
+		return minutes.substr(-2) + ":" + seconds.substr(-2);
 	}
 }
